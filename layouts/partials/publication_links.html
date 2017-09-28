@@ -3,41 +3,108 @@
 
 {{ if $is_list }}
 <a class="btn btn-primary btn-outline btn-xs" href="{{ $.Permalink }}">
-  {{ i18n "btn_details" }}
+  <span style="font-size:large;">{{ i18n "btn_details" }}</span>
 </a>
 {{ end }}
 {{ with $.Params.url_pdf }}
 <a class="btn btn-primary btn-outline{{ if $is_list }} btn-xs{{end}}" href="{{ . | absURL }}">
-  {{ i18n "btn_pdf" }}
+  <span style="font-size:large;">{{ i18n "btn_pdf" }}</span>
 </a>
 {{ end }}
 {{ with $.Params.url_slides }}
 <a class="btn btn-primary btn-outline{{ if $is_list }} btn-xs{{end}}" href="{{ . | absURL }}">
-  {{ i18n "btn_slides" }}
+  <span style="font-size:large;">{{ i18n "btn_slides" }}</span>
+</a>
+{{ end }}
+{{ with $.Params.url_slides_pdf }}
+<a class="btn btn-primary btn-outline{{ if $is_list }} btn-xs{{end}}" href="{{ . | absURL }}">
+  <span style="font-size:large;">{{ i18n "btn_slides_pdf" }}</span>
+</a>
+{{ end }}
+{{ with $.Params.url_poster }}
+<a class="btn btn-primary btn-outline{{ if $is_list }} btn-xs{{end}}" href="{{ . | absURL }}">
+  <span style="font-size:large;">{{ i18n "btn_poster" }}</span>
 </a>
 {{ end }}
 {{ with $.Params.url_video }}
 <a class="btn btn-primary btn-outline{{ if $is_list }} btn-xs{{end}}" href="{{ . | absURL }}">
-  {{ i18n "btn_video" }}
+  <span style="font-size:large;">{{ i18n "btn_video" }}</span>
 </a>
 {{ end }}
 {{ with $.Params.url_code }}
 <a class="btn btn-primary btn-outline{{ if $is_list }} btn-xs{{end}}" href="{{ . | absURL }}">
-  {{ i18n "btn_code" }}
+  <span style="font-size:large;">{{ i18n "btn_code" }}</span>
 </a>
 {{ end }}
 {{ with $.Params.url_dataset }}
 <a class="btn btn-primary btn-outline{{ if $is_list }} btn-xs{{end}}" href="{{ . | absURL }}">
-  {{ i18n "btn_dataset" }}
+  <span style="font-size:large;">{{ i18n "btn_dataset" }}</span>
 </a>
 {{ end }}
 {{ with $.Params.url_project }}
 <a class="btn btn-primary btn-outline{{ if $is_list }} btn-xs{{end}}" href="{{ . | absLangURL }}">
-  {{ i18n "btn_project" }}
+  <span style="font-size:large;">{{ i18n "btn_project" }}</span>
 </a>
 {{ end }}
 {{ range $.Params.url_custom }}
 <a class="btn btn-primary btn-outline{{ if $is_list }} btn-xs{{end}}" href="{{ .url | absURL }}">
-  {{ .name }}
+  <span style="font-size:large;">{{ .name }}</span>
 </a>
 {{ end }}
+{{ with $.Params.bibtex }}
+<a class="btn btn-primary btn-outline{{ if $is_list }} btn-xs{{end}}" href="javascript:;" onClick="
+  if (document.getElementById('{{ $.Params.bibkey }}-bib').style.display == 'block') {
+  document.getElementById('{{ $.Params.bibkey }}-bib').style.display='none';
+  } else {
+  document.getElementById('{{ $.Params.bibkey }}-bib').style.display='block';
+  }
+  ">
+  <span style="font-size:large;">BibTeX</span>
+</a>
+{{ end }}
+{{ with $.Params.abstract }}
+<a class="btn btn-primary btn-outline{{ if $is_list }} btn-xs{{end}}" href="javascript:;" onClick="
+  if (document.getElementById('{{ $.Params.bibkey }}-abstract').style.display == 'block') {
+  document.getElementById('{{ $.Params.bibkey }}-abstract').style.display='none';
+  } else {
+  document.getElementById('{{ $.Params.bibkey }}-abstract').style.display='block';
+  }
+  ">
+  <span style="font-size:large;">{{ i18n "abstract" }}</span>
+</a>
+{{ end }}
+{{ with $.Params.citation }}
+<a class="btn btn-primary btn-outline{{ if $is_list }} btn-xs{{end}}" href="javascript:;" onClick="
+  if (document.getElementById('{{ $.Params.bibkey }}-citations').style.display == 'block') {
+  document.getElementById('{{ $.Params.bibkey }}-citations').style.display='none';
+  } else {
+  document.getElementById('{{ $.Params.bibkey }}-citations').style.display='block';
+  }
+  ">
+  <span style="font-size:large;">{{ i18n "citations" }}</span>
+</a>
+{{ end }}
+
+<div id="{{ $.Params.bibkey }}-bib" style="display: none;margin-left:20px;" style="text-align:right;">
+      <pre>
+{{ $.Params.bibtex }}
+      </pre>
+</div>
+<div id="{{ $.Params.bibkey }}-abstract" style="display: none;margin-left:20px;" style="text-align:right;">
+  <p>
+    {{ $.Params.abstract | markdownify}}
+  </p>
+</div>
+
+<div id="{{ $.Params.bibkey }}-citations" style="display: none;margin-left:20px; font-size:smaller; " style="text-align:right;">
+	{{ range $element := $.Params.citation }}
+		<p>
+      {{ if $element.url }}
+        <a href="{{ $element.url }}">{{ $element.title }}</a>,
+      {{ else }}
+        {{ $element.title }}
+      {{ end }}
+			{{ $element.author }}, {{ $element.venue }}, {{ $element.year }}
+		</p>
+	{{ end }}
+</div>

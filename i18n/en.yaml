@@ -22,6 +22,12 @@
 - id: btn_slides
   translation: Slides
 
+- id: btn_slides_pdf
+  translation: PDF Slides
+
+- id: btn_poster
+  translation: Poster
+
 - id: btn_video
   translation: Video
 
@@ -64,6 +70,9 @@
 
 - id: abstract
   translation: Abstract
+
+- id: citations
+  translation: Citations
 
 - id: publication
   translation: Publication

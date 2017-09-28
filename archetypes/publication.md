@@ -1,4 +1,13 @@
 +++
+# Used both in bibtex generation, and for link creation - should be unique
+bibkey = ""
+
+# Raw bibtex
+bibtex = ""
+
+# Information about work that cites this
+citation = []
+
 title = "{{ replace .TranslationBaseName "-" " " | title }}"
 date = {{ .Date }}
 draft = false
@@ -25,6 +34,15 @@ publication_short = ""
 abstract = ""
 abstract_short = ""
 
+# Additional bibliographic fields
+address = ""
+doi = ""
+issue = ""
+number = ""
+pages = ""
+publisher = ""
+volume = ""
+
 # Does this page contain LaTeX math? (true/false)
 math = false
 
@@ -42,7 +60,9 @@ url_pdf = ""
 url_code = ""
 url_dataset = ""
 url_project = ""
+url_poster = ""
 url_slides = ""
+url_slides_pdf = ""
 url_video = ""
 
 # Featured image
