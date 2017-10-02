@@ -56,7 +56,7 @@
 # Posts widget
 
 - id: continue_reading
-  translation: CONTINUE READING
+  translation: Continue Reading
 
 - id: more_posts
   translation: More Posts

@@ -10,31 +10,14 @@
   <div class="col-xs-12 col-md-8">
     {{ with $page.Content }}<p>{{ . | markdownify }}</p>{{ end }}
 
-    {{ $filter_default := default (int $page.Params.filter_default) 0 }}
-    {{ with $page.Params.filter }}
-    <span id="default-project-filter" class="hidden">{{ (index $page.Params.filter ($filter_default)).tag }}</span>
-    {{ end }}
-
-    <div class="project-toolbar">
-      <div id="filters">
-        <div class="btn-toolbar">
-          <div class="btn-group">
-            {{ range $idx, $item := $page.Params.filter }}
-              <a href="#" data-filter="{{ .tag }}" class="btn btn-primary btn-large{{ if eq $idx $filter_default }} active{{ end }}">{{ .name }}</a>
-            {{ end }}
-          </div>
-        </div>
-      </div>
-    </div>
-
     {{ if eq $page.Params.view 0 }}
 
-    <div id="container-projects" class="isotope">
+    <div id="container-software" class="isotope">
       <ul class="fa-ul" style="position: relative">
 
-        {{ range where $.Data.Pages "Type" "project" }}
-        <li class="project-item isotope-item {{ delimit .Params.tags " " }}">
-          <span class="project-title">
+        {{ range where $.Data.Pages "Type" "software" }}
+        <li class="software-item isotope-item {{ delimit .Params.tags " " }}">
+          <span class="software-title">
           {{ if .Content }}
           <a href="{{ .Permalink }}">
           {{ else }}
@@ -44,7 +27,7 @@
           {{ .Title }}
           {{ if .Content }}</a>{{ else }}{{ with .Params.external_link }}</a>{{ end }}{{ end }}
           </span>
-          {{ with .Params.summary }}<p class="project-summary">{{ . | markdownify }}</p>{{ end }}
+          {{ with .Params.summary }}<p class="software-summary">{{ . | markdownify }}</p>{{ end }}
         </li>
         {{ end }}
 
@@ -53,27 +36,27 @@
 
     {{ else }}
 
-    <div id="container-projects" class="row isotope">
+    <div id="container-software" class="row isotope">
 
-      {{ range $project := where $.Data.Pages "Type" "project" }}
-      {{ $.Scratch.Set "project_url" $project.Permalink }}
+      {{ range $software := where $.Data.Pages "Type" "software" }}
+      {{ $.Scratch.Set "software_url" $software.Permalink }}
       {{ $.Scratch.Set "target" "" }}
-      {{ if $project.Params.external_link }}
-      {{   $.Scratch.Set "project_url" $project.Params.external_link }}
+      {{ if $software.Params.external_link }}
+      {{   $.Scratch.Set "software_url" $software.Params.external_link }}
       {{   $.Scratch.Set "target" "target=\"_blank\"" }}
       {{ end }}
-      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-6 project-item isotope-item {{ delimit .Params.tags " " }}">
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-6 software-item isotope-item {{ delimit .Params.tags " " }}">
         <div class="card">
-          {{ with $project.Params.image_preview }}
-          <a href="{{ $.Scratch.Get "project_url" }}" title="" class="card-image hover-overlay"
+          {{ with $software.Params.image_preview }}
+          <a href="{{ $.Scratch.Get "software_url" }}" title="" class="card-image hover-overlay"
              {{ $.Scratch.Get "target" | safeHTMLAttr }}>
             <img src="{{ "/img/" | relURL }}{{ . }}" alt="" class="img-responsive">
           </a>
           {{ end }}
           <div class="card-text">
-            <h4><a href="{{ $.Scratch.Get "project_url" }}" {{ $.Scratch.Get "target" | safeHTMLAttr }}>{{ .Title }}</a></h4>
+            <h4><a href="{{ $.Scratch.Get "software_url" }}" {{ $.Scratch.Get "target" | safeHTMLAttr }}>{{ .Title }}</a></h4>
             <div class="card-desription">
-              {{ with $project.Params.summary }}<p>{{ . | markdownify }}</p>{{ end }}
+              {{ with $software.Params.summary }}<p>{{ . | markdownify }}</p>{{ end }}
             </div>
           </div>
         </div>

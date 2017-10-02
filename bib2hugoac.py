@@ -194,8 +194,10 @@ def main():
                     title = citation['title'].replace('"', '\\"')
                     cite_info.append('title = "'+ title +'"')
                     cite_info.append('year = "'+ citation['year'] +'"')
-                    if 'url' in citation:
-                        cite_info.append('url = "'+ citation['url'] +'"')
+                    if 'link' in citation:
+                        for content in citation['link']:
+                            if 'url' in content:
+                                cite_info.append('url = "'+ content['url'] +'"')
                     else:
                         cite_info.append('url = ""')
                     if citation['ENTRYTYPE'] == 'inproceedings':
