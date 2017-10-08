@@ -42,6 +42,9 @@
 
 # About widget
 
+- id: employment
+  translation: Employment
+
 - id: interests
   translation: Interests
 
