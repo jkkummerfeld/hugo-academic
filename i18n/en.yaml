@@ -31,6 +31,9 @@
 - id: btn_poster
   translation: Poster
 
+- id: btn_interview
+  translation: Interview
+
 - id: btn_video
   translation: Video
 

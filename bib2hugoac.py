@@ -93,6 +93,7 @@ def main():
             "selected": "false",
             "url_pdf": '""',
             "url_poster": '""',
+            "url_interview": '""',
             "url_code": '""',
             "url_dataset": '""',
             "url_project": '""',
@@ -180,6 +181,10 @@ def main():
             info["url_slides"] = '"{}"'.format(entry['slides'])
         if 'slidespdf' in entry:
             info["url_slides_pdf"] = '"{}"'.format(entry['slidespdf'])
+        if 'video' in entry:
+            info["url_video"] = '"{}"'.format(entry['video'])
+        if 'interview' in entry:
+            info["url_interview"] = '"{}"'.format(entry['interview'])
 
         # Get citations
         cite_filename = os.path.join(args.bib_dir, entry["ID"], "citations.bib")

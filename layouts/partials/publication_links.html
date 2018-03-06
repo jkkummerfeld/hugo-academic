@@ -26,6 +26,11 @@
   <span style="font-size:large;">{{ i18n "btn_poster" }}</span>
 </a>
 {{ end }}
+{{ with $.Params.url_interview }}
+<a class="btn btn-primary btn-outline{{ if $is_list }} btn-xs{{end}}" href="{{ . | absURL }}">
+  <span style="font-size:large;">{{ i18n "btn_interview" }}</span>
+</a>
+{{ end }}
 {{ with $.Params.url_video }}
 <a class="btn btn-primary btn-outline{{ if $is_list }} btn-xs{{end}}" href="{{ . | absURL }}">
   <span style="font-size:large;">{{ i18n "btn_video" }}</span>

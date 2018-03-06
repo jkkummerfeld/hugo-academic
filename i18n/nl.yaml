@@ -14,6 +14,9 @@
 - id: btn_slides
   translation: Dia's
 
+- id: btn_interview
+  translation: Interview
+
 - id: btn_video
   translation: Video
 
