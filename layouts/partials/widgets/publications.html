@@ -20,7 +20,7 @@
     {{ with $page.Content }}<p>{{ . | markdownify }}</p>{{ end }}
 
     {{ $.Scratch.Add "pub-year" "9999" }}
-    {{ range first $page.Params.count (where $.Data.Pages "Type" "publication") }}
+    {{ range where $.Data.Pages "Type" "publication" }}
       {{ $year := .Date.Format "2006" }}
       {{ if ne $year ( $.Scratch.Get "pub-year" ) }}
         <h3>{{ $year }}</h3>
