@@ -74,6 +74,7 @@ def main():
             "title": '""',
             "date": '""',
             "draft": "false",
+            "preprint": "false",
             "authors": '['""']',
             "publication_types": '["0"]',
             "publication": '""',
@@ -147,6 +148,8 @@ def main():
         elif entry['ENTRYTYPE'] == 'article':
             info['publication_types'] = '["2"]'
             info['publication'] = '"'+ entry['journal']['name'] +'"'
+            if entry['journal']['name'] == "ArXiv e-prints":
+                info['preprint'] = 'true'
         elif entry['ENTRYTYPE'] == 'phdthesis':
             info['publication_types'] = '["4"]'
             info['publication'] = '"'+ entry['school'] +'"'

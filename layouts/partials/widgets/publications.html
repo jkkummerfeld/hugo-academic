@@ -19,21 +19,39 @@
   <div class="col-xs-12 col-md-8">
     {{ with $page.Content }}<p>{{ . | markdownify }}</p>{{ end }}
 
-    {{ $.Scratch.Add "pub-year" "9999" }}
+    <h3>Preprints</h3>
     {{ range where $.Data.Pages "Type" "publication" }}
       {{ $year := .Date.Format "2006" }}
-      {{ if ne $year ( $.Scratch.Get "pub-year" ) }}
-        <h3>{{ $year }}</h3>
-        {{ $.Scratch.Set "pub-year" $year }}
+      {{ if .Params.preprint }}
+        {{ if eq $page.Params.list_format 1 }}
+          {{ partial "publication_li_classic" . }}
+        {{ else if eq $page.Params.list_format 2 }}
+          {{ partial "publication_li_detailed" . }}
+        {{ else if eq $page.Params.list_format 3 }}
+          {{ partial "publication_li_jkk" . }}
+        {{ else }}
+          {{ partial "publication_li_simple" . }}
+        {{ end }}
       {{ end }}
-      {{ if eq $page.Params.list_format 1 }}
-        {{ partial "publication_li_classic" . }}
-      {{ else if eq $page.Params.list_format 2 }}
-        {{ partial "publication_li_detailed" . }}
-      {{ else if eq $page.Params.list_format 3 }}
-        {{ partial "publication_li_jkk" . }}
-      {{ else }}
-        {{ partial "publication_li_simple" . }}
+    {{ end }}
+
+    {{ $.Scratch.Add "pub-year" "9999" }}
+    {{ range where $.Data.Pages "Type" "publication" }}
+      {{ if not .Params.preprint }}
+        {{ $year := .Date.Format "2006" }}
+        {{ if ne $year ( $.Scratch.Get "pub-year" ) }}
+          <h3>{{ $year }}</h3>
+          {{ $.Scratch.Set "pub-year" $year }}
+        {{ end }}
+        {{ if eq $page.Params.list_format 1 }}
+          {{ partial "publication_li_classic" . }}
+        {{ else if eq $page.Params.list_format 2 }}
+          {{ partial "publication_li_detailed" . }}
+        {{ else if eq $page.Params.list_format 3 }}
+          {{ partial "publication_li_jkk" . }}
+        {{ else }}
+          {{ partial "publication_li_simple" . }}
+        {{ end }}
       {{ end }}
     {{ end }}
 
