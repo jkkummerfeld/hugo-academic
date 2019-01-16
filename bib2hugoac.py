@@ -64,6 +64,9 @@ def main():
         os.makedirs(args.out_dir)
 
     for index, entry in enumerate(bib_data.entries):
+        for key in entry:
+            if '"' in entry[key]:
+                entry[key] = "'".join(entry[key].split('"'))
         if args.verbose:
             print("Making entry {0}: {1}".format(index + 1, entry['ID']))
 ###            print(entry)
