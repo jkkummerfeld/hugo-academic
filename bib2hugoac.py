@@ -141,8 +141,9 @@ def main():
 
         authors = []
         for author in entry['author']:
-            parts = author.split(",")
-            author = ' '.join(parts[1:]) +" "+ parts[0]
+            author = author.strip()
+            if author.strip("\\\\*") == 'Jonathan K. Kummerfeld':
+                author = "<span style='text-decoration:underline;'>"+ author +"</span>"
             authors.append('"{}"'.format(author.strip()))
         info['authors'] = '[{}]'.format(', '.join(authors))
 
