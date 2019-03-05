@@ -88,7 +88,6 @@ def main():
                 entry[key] = "'".join(entry[key].split('"'))
         if args.verbose:
             print("Making entry {0}: {1}".format(index + 1, entry['ID']))
-###            print(entry)
         
         info = {
             "bibkey": '"{}"'.format(entry['ID']),
@@ -214,10 +213,7 @@ def main():
         cite_filename = os.path.join(args.bib_dir, entry["ID"], "citations.bib")
         cite_info = []
         try:
-            print()
-            print(cite_filename)
             for citation in read_file(cite_filename):
-                print(citation)
                 cite_info.append("\n[[citation]]")
                 title = citation['title'].replace('"', '\\"')
                 cite_info.append('title = "'+ title +'"')
