@@ -24,6 +24,8 @@ def read_file(src):
     cur = []
     for line in open(src):
         line = line.strip()
+        if '\\&' in line:
+            line = '&'.join(line.split("\\&"))
         if line == '}':
             info = {}
             for line in cur[1:]:
