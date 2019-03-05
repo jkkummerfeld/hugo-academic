@@ -1,28 +1,50 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
-"""
-This script takes a directory with a BibTeX .bib file and creates a set of .md
-files for use in the Academic theme for Hugo (a general-purpose, static-site
-generating web framework). Each file incorporates the data for a single
-publication.
-
-Written for and tested using python 3.6.2
-
-Requires: bibtexparser
-
-This is a modified form of code written by Mark Coster.
-Copyright (C) 2017 Mark Coster
-"""
 
 import argparse
 import os
 import io
 import string
 
-import bibtexparser
-from bibtexparser.bparser import BibTexParser
-from bibtexparser.customization import *
+def authors(content):
+    if ',' in content:
+        authors = content.split(",")
+        if 'and' in authors[-1]:
+            last = authors.pop()
+            parts = last.split(" amd ")
+            for part in parts:
+                authors.append(part.strip())
+        return authors
+    else:
+        authors = content.split(" and ")
+        authors = [a.strip() for a in authors]
+        return authors
+
+def read_file(src):
+    citations = []
+    cur = []
+    for line in open(src):
+        line = line.strip()
+        if line == '}':
+            info = {}
+            for line in cur[1:]:
+                key = line.split()[0]
+                content = line[len(key):].strip()[3:-2]
+                if key == 'author':
+                    content = authors(content)
+                info[key] = content
+            info['ENTRYTYPE'] = cur[0].split("{")[0][1:].lower()
+            info['ID'] = cur[0].split("{")[1][:-1]
+            citations.append(info)
+            cur = []
+        elif len(line) > 0 or len(cur) > 0:
+            if len(cur) == 0:
+                if line.startswith("@"):
+                    cur.append(line)
+            elif cur[-1].endswith("},") or cur[-1].startswith("@"):
+                cur.append(line)
+            else:
+                cur[-1] += "\n" + line
+    return citations
 
 def main():
     parser = argparse.ArgumentParser()
@@ -38,13 +60,7 @@ def main():
         print("Opening {}".format(args.bib_dir))
 
     bib_filename = os.path.join(args.bib_dir, "publications.bib")
-    try:
-        with open(bib_filename) as bib_file:
-            parser = BibTexParser()
-            parser.customization = customizations
-            bib_data = bibtexparser.load(bib_file, parser=parser)
-    except IOError:
-        print('There was a problem opening the file.')
+    bib_data = read_file(bib_filename)
 
     raw_bibtex = {}
     with open(bib_filename) as bib_file:
@@ -64,7 +80,7 @@ def main():
             print("Creating directory '{}'".format(args.out_dir))
         os.makedirs(args.out_dir)
 
-    for index, entry in enumerate(bib_data.entries):
+    for index, entry in enumerate(bib_data):
         for key in entry:
             if '"' in entry[key]:
                 entry[key] = "'".join(entry[key].split('"'))
@@ -146,18 +162,18 @@ def main():
                 elif entry['month'].lower() == 'december': month = '12'
             info['date'] = '"{}-{}-01"'.format(year, month)
 
-        if entry['ENTRYTYPE'] == 'inproceedings':
+        if entry['ENTRYTYPE'].lower() == 'inproceedings':
             info['publication_types'] = '["1"]'
             info['publication'] = '"'+ entry['booktitle'] +'"'
-        elif entry['ENTRYTYPE'] == 'article':
+        elif entry['ENTRYTYPE'].lower() == 'article':
             info['publication_types'] = '["2"]'
-            info['publication'] = '"'+ entry['journal']['name'] +'"'
-            if entry['journal']['name'] == "ArXiv e-prints":
+            info['publication'] = '"'+ entry['journal'] +'"'
+            if entry['journal'] == "ArXiv e-prints":
                 info['preprint'] = 'true'
-        elif entry['ENTRYTYPE'] == 'phdthesis':
+        elif entry['ENTRYTYPE'].lower() == 'phdthesis':
             info['publication_types'] = '["4"]'
             info['publication'] = '"'+ entry['school'] +'"'
-        elif entry['ENTRYTYPE'] == 'techreport':
+        elif entry['ENTRYTYPE'].lower() == 'techreport':
             info['publication_types'] = '["4"]'
             info['publication'] = '"'+ entry['institution'] +'"'
 
@@ -174,10 +190,8 @@ def main():
             if name in entry:
                 info[name] = '"{}"'.format(entry[name])
 
-        if 'link' in entry:
-            for content in entry['link']:
-                if 'url' in content:
-                    info["url_pdf"] = '"{}"'.format(content['url'])
+        if 'url' in entry:
+            info["url_pdf"] = '"{}"'.format(entry['url'])
         if 'poster' in entry:
             info["url_poster"] = '"{}"'.format(entry['poster'])
         if 'software' in entry:
@@ -197,37 +211,30 @@ def main():
         cite_filename = os.path.join(args.bib_dir, entry["ID"], "citations.bib")
         cite_info = []
         try:
-            cite_file = open(cite_filename).read()
-            if len(cite_file.strip()) > 0:
-                cite_file = io.StringIO(cite_file)
-                parser = BibTexParser()
-                parser.customization = customizations
-                cite_data = bibtexparser.load(cite_file, parser=parser)
-                for index, citation in enumerate(cite_data.entries):
-                    cite_info.append("\n[[citation]]")
-                    title = citation['title'].replace('"', '\\"')
-                    cite_info.append('title = "'+ title +'"')
-                    cite_info.append('year = "'+ citation['year'] +'"')
-                    if 'link' in citation:
-                        for content in citation['link']:
-                            if 'url' in content:
-                                cite_info.append('url = "'+ content['url'] +'"')
-                    else:
-                        cite_info.append('url = ""')
-                    if citation['ENTRYTYPE'] == 'inproceedings':
-                        cite_info.append('venue = "'+ citation['booktitle'] +'"')
-                    elif citation['ENTRYTYPE'] == 'article':
-                        cite_info.append('venue = "'+ citation['journal']['name'] +'"')
-                    elif citation['ENTRYTYPE'] == 'phdthesis':
-                        cite_info.append('venue = "'+ citation['school'] +'"')
-                    elif citation['ENTRYTYPE'] == 'techreport':
-                        cite_info.append('venue = "'+ citation['institution'] +'"')
-                    cite_authors = []
-                    for author in citation['author']:
-                        parts = author.split(",")
-                        author = ' '.join(parts[1:]) +" "+ parts[0]
-                        cite_authors.append(author.strip())
-                    cite_info.append('author = "'+ ', '.join(cite_authors) +'"')
+            print()
+            print(cite_filename)
+            for citation in read_file(cite_filename):
+                print(citation)
+                cite_info.append("\n[[citation]]")
+                title = citation['title'].replace('"', '\\"')
+                cite_info.append('title = "'+ title +'"')
+                cite_info.append('year = "'+ citation['year'] +'"')
+                if 'url' in citation:
+                    cite_info.append('url = "'+ citation['url'] +'"')
+                else:
+                    cite_info.append('url = ""')
+                if citation['ENTRYTYPE'].lower() == 'inproceedings':
+                    cite_info.append('venue = "'+ citation['booktitle'] +'"')
+                elif citation['ENTRYTYPE'].lower() == 'article':
+                    cite_info.append('venue = "'+ citation['journal'] +'"')
+                elif citation['ENTRYTYPE'].lower() == 'phdthesis':
+                    cite_info.append('venue = "'+ citation['school'] +'"')
+                elif citation['ENTRYTYPE'].lower() == 'techreport':
+                    cite_info.append('venue = "'+ citation['institution'] +'"')
+                cite_authors = []
+                for author in citation['author']:
+                    cite_authors.append(author.strip())
+                cite_info.append('author = "'+ ', '.join(cite_authors) +'"')
         except IOError:
             print(cite_filename, "not found.")
 
@@ -250,23 +257,6 @@ def main():
                 pub_file.write(pub_info)
         except IOError:
             print('There was a problem writing to the file.')
-
-
-def customizations(record):
-    """Use some functions delivered by the library
-
-    :param record: a record
-    :returns: -- customized record
-    """
-    record = type(record)
-    record = author(record)
-    record = editor(record)
-    record = journal(record)
-    record = keyword(record)
-    record = link(record)
-    record = doi(record)
-###    record = convert_to_unicode(record)
-    return record
 
 if __name__ == '__main__':
     main()
