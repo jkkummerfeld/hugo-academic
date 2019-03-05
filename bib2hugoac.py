@@ -17,6 +17,7 @@ Copyright (C) 2017 Mark Coster
 
 import argparse
 import os
+import io
 import string
 
 import bibtexparser
@@ -196,7 +197,9 @@ def main():
         cite_filename = os.path.join(args.bib_dir, entry["ID"], "citations.bib")
         cite_info = []
         try:
-            with open(cite_filename) as cite_file:
+            cite_file = open(cite_filename).read()
+            if len(cite_file.strip()) > 0:
+                cite_file = io.StringIO(cite_file)
                 parser = BibTexParser()
                 parser.customization = customizations
                 cite_data = bibtexparser.load(cite_file, parser=parser)
@@ -262,7 +265,7 @@ def customizations(record):
     record = keyword(record)
     record = link(record)
     record = doi(record)
-    record = convert_to_unicode(record)
+###    record = convert_to_unicode(record)
     return record
 
 if __name__ == '__main__':
