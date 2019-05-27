@@ -24,6 +24,10 @@ def read_file(src):
     cur = []
     for line in open(src):
         line = line.strip()
+        if "{\\'o}" in line:
+            line = "&oacute;".join(line.split("{\\'o}"))
+        if "{\\'e}" in line:
+            line = "&eacute;".join(line.split("{\\'e}"))
         if '\\&' in line:
             line = '&'.join(line.split("\\&"))
         if line == '}':
@@ -69,6 +73,8 @@ def main():
         current = None
         name = None
         for line in bib_file:
+            if "\\'" in line:
+                line = "\\\\'".join(line.split("\\'"))
             if line.startswith("@"):
                 current = []
                 name = line.split("{")[1].split(',')[0]
@@ -116,6 +122,7 @@ def main():
             "url_pdf": '""',
             "url_poster": '""',
             "url_interview": '""',
+            "url_arxiv": '""',
             "url_code": '""',
             "url_dataset": '""',
             "url_project": '""',
@@ -194,6 +201,10 @@ def main():
 
         if 'url' in entry:
             info["url_pdf"] = '"{}"'.format(entry['url'])
+        if 'arxiv' in entry:
+            info["url_arxiv"] = '"{}"'.format(entry['arxiv'])
+            if 'ur' not in entry or len(entry['url']) == 0:
+                info["url_pdf"] = '"{}"'.format(entry['arxiv'])
         if 'poster' in entry:
             info["url_poster"] = '"{}"'.format(entry['poster'])
         if 'software' in entry:
@@ -230,6 +241,8 @@ def main():
                     cite_info.append('venue = "'+ citation['school'] +'"')
                 elif citation['ENTRYTYPE'].lower() == 'techreport':
                     cite_info.append('venue = "'+ citation['institution'] +'"')
+                if args.verbose:
+                    print("Adding citation:", citation['title'])
                 cite_authors = []
                 for author in citation['author']:
                     cite_authors.append(author.strip())

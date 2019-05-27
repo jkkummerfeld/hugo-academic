@@ -11,6 +11,9 @@
 - id: btn_pdf
   translation: PDF
 
+- id: btn_arxiv
+  translation: arXiv
+
 - id: btn_slides
   translation: Dia's
 

@@ -11,6 +11,11 @@
   <span style="font-size:large;">{{ i18n "btn_pdf" }}</span>
 </a>
 {{ end }}
+{{ with $.Params.url_arxiv }}
+<a class="btn btn-primary btn-outline{{ if $is_list }} btn-xs{{end}}" href="{{ . | absURL }}">
+  <span style="font-size:large;">{{ i18n "btn_arxiv" }}</span>
+</a>
+{{ end }}
 {{ with $.Params.url_slides }}
 <a class="btn btn-primary btn-outline{{ if $is_list }} btn-xs{{end}}" href="{{ . | absURL }}">
   <span style="font-size:large;">{{ i18n "btn_slides" }}</span>
