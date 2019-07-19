@@ -203,7 +203,7 @@ def main():
             info["url_pdf"] = '"{}"'.format(entry['url'])
         if 'arxiv' in entry:
             info["url_arxiv"] = '"{}"'.format(entry['arxiv'])
-            if 'ur' not in entry or len(entry['url']) == 0:
+            if 'url' not in entry or len(entry['url']) == 0:
                 info["url_pdf"] = '"{}"'.format(entry['arxiv'])
         if 'poster' in entry:
             info["url_poster"] = '"{}"'.format(entry['poster'])
