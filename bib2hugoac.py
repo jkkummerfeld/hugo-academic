@@ -34,6 +34,8 @@ def read_file(src):
             info = {}
             for line in cur[1:]:
                 key = line.split()[0]
+                if key == 'reviews' or key == 'senior-authors':
+                    continue
                 content = line[len(key):].strip()[3:-2]
                 if key == 'author':
                     content = authors(content)
@@ -79,7 +81,16 @@ def main():
                 current = []
                 name = line.split("{")[1].split(',')[0]
             if current is not None:
-                current.append(line)
+                if ' reviews ' in line:
+                    pass
+                elif ' senior-authors ' in line:
+                    pass
+                elif ' shortvenue ' in line:
+                    pass
+                elif ' abstract ' in line:
+                    pass
+                else:
+                    current.append(line)
             if line.startswith("}"):
                 raw_bibtex[name] = ''.join(current)
 
