@@ -139,6 +139,7 @@ def main():
             "url_project": '""',
             "url_slides": '""',
             "url_video": '""',
+            "url_blog": '""',
         }
         
         if 'abstract' in entry:
@@ -230,6 +231,8 @@ def main():
             info["url_video"] = '"{}"'.format(entry['video'])
         if 'interview' in entry:
             info["url_interview"] = '"{}"'.format(entry['interview'])
+        if 'blog_post' in entry:
+            info["url_blog_post"] = '"{}"'.format(entry['blog_post'])
 
         # Get citations
         cite_filename = os.path.join(args.bib_dir, entry["ID"], "citations.bib")
