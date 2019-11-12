@@ -44,6 +44,7 @@
         <li>
           <a itemprop="sameAs" href="{{ .link | safeURL }}" target="_blank">
             <i class="{{ $pack }} {{ $pack }}-{{ .icon }} big-icon"></i>
+            {{ .name }}
           </a>
         </li>
         {{ end }}
