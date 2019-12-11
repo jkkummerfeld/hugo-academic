@@ -15,7 +15,10 @@
   translation: arXiv
 
 - id: btn_slides
-  translation: Dia's
+  translation: Slides
+
+- id: btn_supplementary
+  translation: Supplementary
 
 - id: btn_interview
   translation: Interview

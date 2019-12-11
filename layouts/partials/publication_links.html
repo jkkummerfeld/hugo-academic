@@ -1,19 +1,24 @@
 {{ $is_list := .is_list }}
 {{ $ := .content }}
 
-{{ if $is_list }}
-<a class="btn btn-primary btn-outline btn-xs" href="{{ $.Permalink }}">
-  <span style="font-size:large;">{{ i18n "btn_details" }}</span>
-</a>
-{{ end }}
-{{ with $.Params.url_pdf }}
-<a class="btn btn-primary btn-outline{{ if $is_list }} btn-xs{{end}}" href="{{ . | absURL }}">
-  <span style="font-size:large;">{{ i18n "btn_pdf" }}</span>
-</a>
-{{ end }}
 {{ with $.Params.url_blog_post }}
 <a class="btn btn-primary btn-outline{{ if $is_list }} btn-xs{{end}}" href="{{ . | absURL }}">
   <span style="font-size:large;">{{ i18n "btn_blog_post" }}</span>
+</a>
+{{ end }}
+{{ with $.Params.url_code }}
+<a class="btn btn-primary btn-outline{{ if $is_list }} btn-xs{{end}}" href="{{ . | absURL }}">
+  <span style="font-size:large;">{{ i18n "btn_code" }}</span>
+</a>
+{{ end }}
+{{ with $.Params.url_dataset }}
+<a class="btn btn-primary btn-outline{{ if $is_list }} btn-xs{{end}}" href="{{ . | absURL }}">
+  <span style="font-size:large;">{{ i18n "btn_dataset" }}</span>
+</a>
+{{ end }}
+{{ with $.Params.url_supplementary }}
+<a class="btn btn-primary btn-outline{{ if $is_list }} btn-xs{{end}}" href="{{ . | absURL }}">
+  <span style="font-size:large;">{{ i18n "btn_supplementary" }}</span>
 </a>
 {{ end }}
 {{ with $.Params.url_arxiv }}
@@ -44,16 +49,6 @@
 {{ with $.Params.url_video }}
 <a class="btn btn-primary btn-outline{{ if $is_list }} btn-xs{{end}}" href="{{ . | absURL }}">
   <span style="font-size:large;">{{ i18n "btn_video" }}</span>
-</a>
-{{ end }}
-{{ with $.Params.url_code }}
-<a class="btn btn-primary btn-outline{{ if $is_list }} btn-xs{{end}}" href="{{ . | absURL }}">
-  <span style="font-size:large;">{{ i18n "btn_code" }}</span>
-</a>
-{{ end }}
-{{ with $.Params.url_dataset }}
-<a class="btn btn-primary btn-outline{{ if $is_list }} btn-xs{{end}}" href="{{ . | absURL }}">
-  <span style="font-size:large;">{{ i18n "btn_dataset" }}</span>
 </a>
 {{ end }}
 {{ with $.Params.url_project }}

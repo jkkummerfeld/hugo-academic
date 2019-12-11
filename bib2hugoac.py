@@ -233,6 +233,8 @@ def main():
             info["url_interview"] = '"{}"'.format(entry['interview'])
         if 'blog_post' in entry:
             info["url_blog_post"] = '"{}"'.format(entry['blog_post'])
+        if 'supplementary' in entry:
+            info["url_supplementary"] = '"{}"'.format(entry['supplementary'])
 
         # Get citations
         cite_filename = os.path.join(args.bib_dir, entry["ID"], "citations.bib")
