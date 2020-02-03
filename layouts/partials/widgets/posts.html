@@ -4,7 +4,6 @@
 
 <!-- Blog Posts widget -->
 <div class="row">
-  <div class="col-xs-12 col-md-4 section-heading">
 
     <h1>{{ with $page.Title }}{{ . | markdownify }}{{ end }}</h1>
     {{ with $page.Params.subtitle }}<p>{{ . | markdownify }}</p>{{ end }}
@@ -17,8 +16,6 @@
     </p>
     {{ end }}
 
-  </div>
-  <div class="col-xs-12 col-md-8">
 
     {{ with $page.Content }}<p>{{ . | markdownify }}</p>{{ end }}
 
@@ -78,5 +75,4 @@
       {{ end }}
     {{ end }}
 
-  </div>
 </div>
