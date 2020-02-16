@@ -2,6 +2,7 @@
 {{ $page := .page }}
 {{ $pubs_len := len (where $.Data.Pages "Type" "publication") }}
 {{ $preprints_len := len (where (where $.Data.Pages "Type" "publication") ".Params.preprint" "==" true ) }}
+{{ $nonarchival_len := len (where (where $.Data.Pages "Type" "publication") ".Params.archival" "==" false ) }}
 
 <!-- Publications widget -->
 <div class="row">
@@ -19,7 +20,8 @@
   {{ with $page.Content }}<p>{{ . | markdownify }}</p>{{ end }}
 
   {{ if gt $preprints_len 0 }}
-    <h3>Preprints</h3>
+    <br />
+    <h2>Preprints</h2>
   {{ end }}
   {{ range where $.Data.Pages "Type" "publication" }}
     {{ $year := .Date.Format "2006" }}
@@ -38,7 +40,33 @@
 
   {{ $.Scratch.Add "pub-year" "9999" }}
   {{ range where $.Data.Pages "Type" "publication" }}
-    {{ if not .Params.preprint }}
+    {{ if .Params.archival }}
+      {{ if not .Params.preprint }}
+        {{ $year := .Date.Format "2006" }}
+        {{ if ne $year ( $.Scratch.Get "pub-year" ) }}
+          <h3>{{ $year }}</h3>
+          {{ $.Scratch.Set "pub-year" $year }}
+        {{ end }}
+        {{ if eq $page.Params.list_format 1 }}
+          {{ partial "publication_li_classic" . }}
+        {{ else if eq $page.Params.list_format 2 }}
+          {{ partial "publication_li_detailed" . }}
+        {{ else if eq $page.Params.list_format 3 }}
+          {{ partial "publication_li_jkk" . }}
+        {{ else }}
+          {{ partial "publication_li_simple" . }}
+        {{ end }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
+
+  {{ if gt $nonarchival_len 0 }}
+    <br />
+    <h2>Non-Archival</h2>
+  {{ end }}
+  {{ $.Scratch.Add "pub-year" "9999" }}
+  {{ range where $.Data.Pages "Type" "publication" }}
+    {{ if not .Params.archival }}
       {{ $year := .Date.Format "2006" }}
       {{ if ne $year ( $.Scratch.Get "pub-year" ) }}
         <h3>{{ $year }}</h3>

@@ -89,6 +89,8 @@ def main():
                     pass
                 elif ' abstract ' in line:
                     pass
+                elif ' archival ' in line:
+                    pass
                 else:
                     current.append(line)
             if line.startswith("}"):
@@ -113,6 +115,7 @@ def main():
             "date": '""',
             "draft": "false",
             "preprint": "false",
+            "archival": "true",
             "authors": '['""']',
             "publication_types": '["0"]',
             "publication": '""',
@@ -197,6 +200,9 @@ def main():
         elif entry['ENTRYTYPE'].lower() == 'techreport':
             info['publication_types'] = '["4"]'
             info['publication'] = '"'+ entry['institution'] +'"'
+
+        if 'archival' in entry and entry['archival'] == 'false':
+            info['archival'] = 'false'
 
         if 'shortvenue' in entry:
             info['publication_short'] = '"'+ entry['shortvenue'] +'"'
