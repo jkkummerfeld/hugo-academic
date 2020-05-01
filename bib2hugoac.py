@@ -192,7 +192,12 @@ def main():
         elif entry['ENTRYTYPE'].lower() == 'article':
             info['publication_types'] = '["2"]'
             info['publication'] = '"'+ entry['journal'] +'"'
-            if entry['journal'] == "ArXiv e-prints":
+            if entry['journal'] == "ArXiv e-prints" or entry.get('shortvenue', "") == "ArXiv":
+                info['preprint'] = 'true'
+        elif entry['ENTRYTYPE'].lower() == 'misc':
+            info['publication_types'] = '["4"]'
+            info['publication'] = '"'+ entry['archivePrefix'] +'"'
+            if entry['shortvenue'] == "ArXiv":
                 info['preprint'] = 'true'
         elif entry['ENTRYTYPE'].lower() == 'phdthesis':
             info['publication_types'] = '["4"]'
@@ -201,7 +206,7 @@ def main():
             info['publication_types'] = '["4"]'
             info['publication'] = '"'+ entry['institution'] +'"'
 
-        if 'archival' in entry and entry['archival'] == 'false':
+        if entry.get('archival', "") == 'false':
             info['archival'] = 'false'
 
         if 'shortvenue' in entry:
