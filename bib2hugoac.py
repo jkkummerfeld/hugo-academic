@@ -24,6 +24,10 @@ def read_file(src):
     cur = []
     for line in open(src):
         line = line.strip()
+        if "{\\'a}" in line:
+            line = "&aacute;".join(line.split("{\\'a}"))
+        if "{\\'i}" in line:
+            line = "&iacute;".join(line.split("{\\'i}"))
         if "{\\'o}" in line:
             line = "&oacute;".join(line.split("{\\'o}"))
         if "{\\'e}" in line:
