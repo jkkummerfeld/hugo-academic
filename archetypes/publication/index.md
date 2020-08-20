@@ -66,4 +66,13 @@ projects: []
 #   E.g. `slides: "example"` references `content/slides/example/index.md`.
 #   Otherwise, set `slides: ""`.
 slides: ""
+
+# Work that cites this (optional).
+#   Uncomment and edit lines below to show papers that cite this work.
+# citations:
+# - title: Awesome paper
+#   year: 2020
+#   url: http://www.aclweb.org/anthology/blah.pdf
+#   venue: ACL
+#   author: People
 ---

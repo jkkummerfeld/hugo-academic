@@ -60,6 +60,7 @@
         <li>
           <a href="{{ $link | safeURL }}" {{ $target | safeHTMLAttr }}>
             <i class="{{ $pack }} {{ $pack_prefix }}-{{ .icon }} big-icon"></i>
+            {{ .name }}
           </a>
         </li>
         {{ end }}

@@ -10,7 +10,7 @@
   {{ else }}
     {{ $link = . | relURL }}
   {{ end }}
-<a class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-sm{{end}}" href="{{ $link }}" target="_blank" rel="noopener">
+<a class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-med{{end}}" href="{{ $link }}" target="_blank" rel="noopener">
   {{ i18n "btn_preprint" }}
 </a>
 {{ end }}
@@ -25,17 +25,30 @@
 {{ end }}
 
 {{ with $pdf }}
-<a class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-sm{{end}}" href="{{ . }}" target="_blank" rel="noopener">
+<a class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-med{{end}}" href="{{ . }}" target="_blank" rel="noopener">
   {{ i18n "btn_pdf" }}
 </a>
 {{ end }}
 {{ $resource := $page.Resources.GetMatch "cite.bib" }}
 {{ with $resource }}
-<button type="button" class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-sm{{end}} js-cite-modal"
+<button type="button" class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-med{{end}} js-cite-modal"
         data-filename="{{ .RelPermalink }}">
   {{ i18n "btn_cite" }}
 </button>
 {{ end }}
+
+{{ with $page.Params.abstract }}
+<a class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-med{{end}}" href="javascript:;" onClick="
+  if (document.getElementById('{{ $page.Params.bibkey }}-abstract').style.display == 'block') {
+  document.getElementById('{{ $page.Params.bibkey }}-abstract').style.display='none';
+  } else {
+  document.getElementById('{{ $page.Params.bibkey }}-abstract').style.display='block';
+  }
+  ">
+    {{ i18n "abstract" }}
+</a>
+{{ end }}
+
 {{ with $page.Params.url_code }}
   {{ $resource := $page.Resources.GetMatch . }}
   {{ if $resource }}
@@ -43,7 +56,7 @@
   {{ else }}
     {{ $link = . | relURL }}
   {{ end }}
-<a class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-sm{{end}}" href="{{ $link }}" target="_blank" rel="noopener">
+<a class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-med{{end}}" href="{{ $link }}" target="_blank" rel="noopener">
   {{ i18n "btn_code" }}
 </a>
 {{ end }}
@@ -54,14 +67,14 @@
   {{ else }}
     {{ $link = . | relURL }}
   {{ end }}
-<a class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-sm{{end}}" href="{{ $link }}" target="_blank" rel="noopener">
+<a class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-med{{end}}" href="{{ $link }}" target="_blank" rel="noopener">
   {{ i18n "btn_dataset" }}
 </a>
 {{ end }}
 {{ if $page.Params.projects }}
 {{ range $page.Params.projects }}
   {{ with (site.GetPage (printf "project/%s" .)) }}
-  <a class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-sm{{end}}" href="{{ .RelPermalink }}">
+  <a class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-med{{end}}" href="{{ .RelPermalink }}">
     {{ i18n "btn_project" }}
   </a>
   {{ else }}
@@ -70,7 +83,7 @@
 {{ end }}
 {{ else }}
 {{ with $page.Params.url_project }}
-<a class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-sm{{end}}" href="{{ . }}" target="_blank" rel="noopener">
+<a class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-med{{end}}" href="{{ . }}" target="_blank" rel="noopener">
   {{ i18n "btn_project" }}
 </a>
 {{ end }}
@@ -82,13 +95,13 @@
   {{ else }}
     {{ $link = . | relURL }}
   {{ end }}
-<a class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-sm{{end}}" href="{{ $link }}" target="_blank" rel="noopener">
+<a class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-med{{end}}" href="{{ $link }}" target="_blank" rel="noopener">
   {{ i18n "btn_poster" }}
 </a>
 {{ end }}
 {{ if $page.Params.slides }}
   {{ with (site.GetPage (printf "slides/%s" $page.Params.slides)) }}
-  <a class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-sm{{end}}" href="{{ .RelPermalink }}" target="_blank">
+  <a class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-med{{end}}" href="{{ .RelPermalink }}" target="_blank">
     {{ i18n "btn_slides" }}
   </a>
   {{ end }}
@@ -100,7 +113,7 @@
   {{ else }}
     {{ $link = . | relURL }}
   {{ end }}
-<a class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-sm{{end}}" href="{{ $link }}" target="_blank" rel="noopener">
+<a class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-med{{end}}" href="{{ $link }}" target="_blank" rel="noopener">
   {{ i18n "btn_slides" }}
 </a>
 {{ end }}
@@ -112,7 +125,7 @@
   {{ else }}
     {{ $link = . | relURL }}
   {{ end }}
-<a class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-sm{{end}}" href="{{ $link }}" target="_blank" rel="noopener">
+<a class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-med{{end}}" href="{{ $link }}" target="_blank" rel="noopener">
   {{ i18n "btn_video" }}
 </a>
 {{ end }}
@@ -123,12 +136,12 @@
   {{ else }}
     {{ $link = . | relURL }}
   {{ end }}
-<a class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-sm{{end}}" href="{{ $link }}" target="_blank" rel="noopener">
+<a class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-med{{end}}" href="{{ $link }}" target="_blank" rel="noopener">
   {{ i18n "btn_source" }}
 </a>
 {{ end }}
 {{ with $page.Params.doi }}
-<a class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-sm{{end}}" href="https://doi.org/{{ . }}" target="_blank" rel="noopener">
+<a class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-med{{end}}" href="https://doi.org/{{ . }}" target="_blank" rel="noopener">
   DOI
 </a>
 {{ end }}
@@ -151,8 +164,38 @@
   {{ else if in (slice "http" "https") $scheme }}
     {{ $target = "target=\"_blank\" rel=\"noopener\"" }}
   {{ end }}
-  <a class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-sm{{end}}" href="{{ $link | safeURL }}" {{ $target | safeHTMLAttr }}>
+  <a class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-med{{end}}" href="{{ $link | safeURL }}" {{ $target | safeHTMLAttr }}>
     {{ if .icon }}<i class="{{ $pack }} {{ $pack_prefix }}-{{ .icon }} {{if .name}}mr-1{{end}}"></i>{{end}}
     {{ with .name }}{{ . | safeHTML }}{{end}}
   </a>
 {{ end }}
+{{ with $page.Params.citations }}
+<a class="btn btn-outline-primary my-1 mr-1{{ if $is_list }} btn-med{{end}}" href="javascript:;" onClick="
+  if (document.getElementById('{{ $page.Params.bibkey }}-citations').style.display == 'block') {
+  document.getElementById('{{ $page.Params.bibkey }}-citations').style.display='none';
+  } else {
+  document.getElementById('{{ $page.Params.bibkey }}-citations').style.display='block';
+  }
+  ">
+  {{ i18n "btn_citations" }} ({{ $page.Params.citation_count }})
+</a>
+{{ end }}
+
+<div id="{{ $page.Params.bibkey }}-abstract" style="display: none;margin-left:20px;" style="text-align:right;">
+  <p>
+    {{ $page.Params.abstract | markdownify}}
+  </p>
+</div>
+
+<div id="{{ $page.Params.bibkey }}-citations" style="display: none;margin-left:20px; font-size:smaller; " style="text-align:right;">
+  {{ range $element := $page.Params.citations }}
+    <p>
+      {{ if $element.url }}
+        <a href="{{ $element.url }}">{{ $element.title }}</a>,
+      {{ else }}
+        {{ $element.title }}
+      {{ end }}
+      {{ $element.author }}, {{ $element.venue }}, {{ $element.year }}
+    </p>
+  {{ end }}
+</div>

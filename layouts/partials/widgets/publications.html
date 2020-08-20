@@ -46,6 +46,11 @@
 
 {{ $count := len $query }}
 
+{{ $preprints := where (where $query "Type" "publication") ".Params.preprint" "==" true  }}
+{{ $preprints_len := len $preprints }}
+{{ $nonarchival := where (where $query "Type" "publication") ".Params.archival" "==" false  }}
+{{ $nonarchival_len := len $nonarchival }}
+
 {{/* Sort */}}
 {{ $sort_by := "Date" }}
 {{ $query = sort $query $sort_by $items_sort }}
@@ -57,17 +62,7 @@
   {{ $query = first $items_count $query }}
 {{ end }}
 
-{{/* Localisation */}}
-{{ $i18n := "" }}
-{{ if eq $items_type "post" }}
-  {{ $i18n = "more_posts" }}
-{{ else if eq $items_type "talk" }}
-  {{ $i18n = "more_talks" }}
-{{ else if eq $items_type "publication" }}
-  {{ $i18n = "more_publications" }}
-{{ else }}
-  {{ $i18n = "more_pages" }}
-{{ end }}
+{{ $i18n := "more_publications" }}
 
 <div class="row">
   <div class="col-12 col-lg-12 section-heading">
@@ -76,21 +71,67 @@
   </div>
   <div class="col-12 col-lg-12">
 
+    {{ if gt $preprints_len 0 }}
+      <br />
+      <h2>Preprints</h2>
+      {{ range $post := $preprints }}
+        {{ partial "li_jkk" . }}
+      {{ end }}
+    {{ end }}
+
     {{ with $st.Content }}{{ . }}{{ end }}
 
+    {{ $.Scratch.Add "pub-year" "9999" }}
     {{ range $post := $query }}
-      {{ if eq $st.Params.design.view 1 }}
-        {{ partial "li_list" . }}
-      {{ else if eq $st.Params.design.view 3 }}
-        {{ partial "li_card" . }}
-      {{ else if eq $st.Params.design.view 4 | and (eq $items_type "publication") }}
-        {{ partial "li_citation" . }}
-      {{ else if eq $st.Params.design.view 5 }}
-        {{ partial "li_jkk" . }}
-      {{ else }}
-        {{ partial "li_compact" . }}
+      {{ if .Params.archival }}
+        {{ if not .Params.preprint }}
+          {{ $year := .Params.Date.Format "2006" }}
+          {{ if ne $year ( $.Scratch.Get "pub-year" ) }}
+            <h3>{{ $year }}</h3>
+            {{ $.Scratch.Set "pub-year" $year }}
+          {{ end }}
+          {{ if eq $st.Params.design.view 1 }}
+            {{ partial "li_list" . }}
+          {{ else if eq $st.Params.design.view 3 }}
+            {{ partial "li_card" . }}
+          {{ else if eq $st.Params.design.view 4 | and (eq $items_type "publication") }}
+            {{ partial "li_citation" . }}
+          {{ else if eq $st.Params.design.view 5 }}
+            {{ partial "li_jkk" . }}
+          {{ else }}
+            {{ partial "li_compact" . }}
+          {{ end }}
+        {{ end }}
       {{ end }}
     {{end}}
+
+    {{ if gt $nonarchival_len 0 }}
+      <br />
+      <h2>Non-Archival</h2>
+      {{ $.Scratch.Add "pub-year" "9999" }}
+      {{ range $post := $query }}
+        {{ if not .Params.archival }}
+          {{ if not .Params.preprint }}
+            {{ $year := .Params.Date.Format "2006" }}
+            {{ if ne $year ( $.Scratch.Get "pub-year" ) }}
+              <h3>{{ $year }}</h3>
+              {{ $.Scratch.Set "pub-year" $year }}
+            {{ end }}
+            {{ if eq $st.Params.design.view 1 }}
+              {{ partial "li_list" . }}
+            {{ else if eq $st.Params.design.view 3 }}
+              {{ partial "li_card" . }}
+            {{ else if eq $st.Params.design.view 4 | and (eq $items_type "publication") }}
+              {{ partial "li_citation" . }}
+            {{ else if eq $st.Params.design.view 5 }}
+              {{ partial "li_jkk" . }}
+            {{ else }}
+              {{ partial "li_compact" . }}
+            {{ end }}
+          {{ end }}
+        {{ end }}
+      {{end}}
+    {{ end }}
 
     {{ if gt $count $items_count }}
     <div class="see-all">

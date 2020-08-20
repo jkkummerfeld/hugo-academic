@@ -45,6 +45,9 @@
 
 # Buttons
 
+- id: btn_citations
+  translation: Citations
+
 - id: btn_preprint
   translation: Preprint
 
