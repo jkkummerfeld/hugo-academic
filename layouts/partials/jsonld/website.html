@@ -10,5 +10,17 @@
   },
   {{end -}}
   "url": {{site.BaseURL}}
+  {{- if site.Params.search.description }}
+  "description" : {{ site.Params.search.description }},
+  {{end -}}
+  {{- if site.Params.search.page_name }}
+  "name" : {{ site.Params.search.page_name }},
+  {{end -}}
+  {{- if site.Params.search.author }}
+  "author" : {{ site.Params.search.author }},
+  "creator" : {{ site.Params.search.author }},
+  "publisher" : {{ site.Params.search.author }},
+  {{end -}}
+  "inLanguage" : "en-US",
 }
 </script>
