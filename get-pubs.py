@@ -6,20 +6,21 @@ import io
 import string
 
 def authors(content):
-    if ',' in content:
-        authors = content.split(",")
-        if 'and' in authors[-1]:
-            last = authors.pop()
-            parts = last.split(" amd ")
-            for part in parts:
-                authors.append(part.strip())
-        return authors
-    else:
-        authors = content.split(" and ")
-        authors = [a.strip() for a in authors]
-        return authors
+    authors = []
+    for author in content.split(" and "):
+        if ',' in author:
+            parts = author.strip().split()
+            last = parts[0].strip(",")
+            first = ' '.join(parts[1:])
+            authors.append((first, last))
+        else:
+            parts = author.strip().split()
+            last = parts[-1]
+            first = ' '.join(parts[:-1])
+            authors.append((first, last))
+    return authors
 
-def read_file(src):
+def read_file(src, simple_authors = False):
     citations = []
     cur = []
     for line in open(src):
@@ -44,7 +45,13 @@ def read_file(src):
                     continue
                 content = line[len(key):].strip().lstrip("=").rstrip(",").strip()[1:-1]
                 if key == 'author':
-                    content = authors(content)
+                    if simple_authors:
+                        if ' and ' in content:
+                            content = ' and '.join(content.split(", and "))
+                            parts = content.split(" and ")
+                            content = ', '.join([v.strip() for v in parts])
+                    else:
+                        content = authors(content)
                 info[key] = content
             info['ENTRYTYPE'] = cur[0].split("{")[0][1:].lower()
             info['ID'] = cur[0].split("{")[1][:-1]
@@ -168,11 +175,12 @@ def main():
         info['bibtex'] = '"""{}"""'.format(bibtex.replace('\\%', '%'))
 
         authors = []
-        for author in entry['author']:
-            author = author.strip().strip("\\\\*")
+        for first, last in entry['author']:
+            last = last.strip().strip("\\\\*")
+            author = first +" "+ last
             if author == 'Jonathan K. Kummerfeld':
                 author = "admin"
-            authors.append('\n- {}'.format(author.strip()))
+            authors.append('\n- {}'.format(author))
         info['authors'] = ''.join(authors)
 
         if 'year' in entry:
@@ -266,7 +274,7 @@ def main():
         cite_info = ['citations:']
         info['citation_count'] = 0
         try:
-            for citation in read_file(cite_filename):
+            for citation in read_file(cite_filename, True):
                 info['citation_count'] += 1
                 title = citation['title'].replace('"', '\\"')
                 vals = {}
@@ -282,10 +290,7 @@ def main():
                     vals['venue'] = citation['school'] 
                 elif citation['ENTRYTYPE'].lower() == 'techreport':
                     vals['venue'] = citation['institution']
-                vals['authors'] = []
-                for author in citation['author']:
-                    vals['authors'].append(author.strip())
-                vals['authors'] = ', '.join(vals['authors'])
+                vals['authors'] = citation['author']
                 parts = []
                 for key, value in vals.items():
                     if ':' in value or '{' in value:
