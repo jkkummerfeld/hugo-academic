@@ -8,11 +8,25 @@
   {{ $target = "target=\"_blank\" rel=\"noopener\"" }}
 {{ end }}
 
+{{ $pdf := "" }}
+{{ $resource := $item.Resources.GetMatch (printf "%s.pdf" $item.File.ContentBaseName) }}
+{{ with $resource }}
+  {{ $pdf = .RelPermalink }}
+{{ else }}
+  {{ if $item.Params.url_pdf }}
+    {{ $pdf = $item.Params.url_pdf | relURL }}
+  {{ end }}
+{{ end }}
+
 <div class="media stream-item">
   <div class="media-body">
 
     <div>
-      <a href="{{$link}}" {{ $target | safeHTMLAttr }}>{{ $item.Title }}</a>
+      {{ with $pdf }}
+        <a href="{{ . }}" {{ $target | safeHTMLAttr }}>{{ $item.Title }}</a>
+      {{ else }}
+        <a href="{{$link}}" {{ $target | safeHTMLAttr }}>{{ $item.Title }}</a>
+      {{ end }}
     </div>
     <div>
       {{ partial "page_metadata_authors" $item }}

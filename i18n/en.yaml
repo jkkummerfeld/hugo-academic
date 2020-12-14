@@ -63,6 +63,9 @@
 - id: btn_video
   translation: Video
 
+- id: btn_blog_post
+  translation: Blog Post
+
 - id: btn_code
   translation: Code
 

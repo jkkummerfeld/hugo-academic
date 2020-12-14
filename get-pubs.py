@@ -254,14 +254,14 @@ def main():
             info["url_slides"] = entry['slides']
         if 'video' in entry:
             info["url_video"] = entry['video']
+        if 'blog_post' in entry:
+            info["url_blog"] = entry['blog_post']
 
         info['links'] = []
         if 'slidespdf' in entry:
             info["links"].append("\n- name: {}\n  url: {}".format("PDF Slides", entry['slidespdf']))
         if 'interview' in entry:
             info["links"].append("\n- name: {}\n  url: {}".format("Interview", entry['interview']))
-        if 'blog_post' in entry:
-            info["links"].append("\n- name: {}\n  url: {}".format("Blog Post", entry['blog_post']))
         if 'supplementary' in entry:
             info["links"].append("\n- name: {}\n  url: {}".format("Supplementary Material", entry['supplementary']))
         if 'arxiv' in entry:
@@ -303,6 +303,9 @@ def main():
                     print("Adding citation:", citation['title'])
         except IOError:
             print(cite_filename, "not found.")
+        except KeyError as e:
+            print(cite_filename, "error")
+            raise e
 
         # Generate
 
