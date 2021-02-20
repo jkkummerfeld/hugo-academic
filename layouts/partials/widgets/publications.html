@@ -71,14 +71,6 @@
   </div>
   <div class="col-12 col-lg-12">
 
-    {{ if gt $preprints_len 0 }}
-      <br />
-      <h2>Preprints</h2>
-      {{ range $post := $preprints }}
-        {{ partial "li_jkk" . }}
-      {{ end }}
-    {{ end }}
-
     {{ with $st.Content }}{{ . }}{{ end }}
 
     {{ $.Scratch.Add "pub-year" "9999" }}
@@ -111,7 +103,6 @@
       {{ $.Scratch.Add "pub-year" "9999" }}
       {{ range $post := $query }}
         {{ if not .Params.archival }}
-          {{ if not .Params.preprint }}
             {{ $year := .Params.Date.Format "2006" }}
             {{ if ne $year ( $.Scratch.Get "pub-year" ) }}
               <h3>{{ $year }}</h3>
@@ -128,7 +119,6 @@
             {{ else }}
               {{ partial "li_compact" . }}
             {{ end }}
-          {{ end }}
         {{ end }}
       {{end}}
     {{ end }}
